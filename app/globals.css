@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+    background-image: url('/image.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+}
+/* In your global CSS file */
+/* In your global CSS file */
+@layer components {
+  .custom-clock {
+    @apply fixed top-4 right-4 p-4 bg-black text-white rounded-lg text-sm font-mono;
+  }
+}
+
+.header {
+  color: #000; /* Dark text color */
+  padding: "auto"; /* Padding around the header */
+  text-align: center; /* Center-align the text */
+  font-size: 60px; /* Font size for the header text */
+  font-family: fantasy;
+  font-weight: bold;
+
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
