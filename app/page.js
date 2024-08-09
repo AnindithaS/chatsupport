@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Box, Stack, TextField, Button } from '@mui/material'
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import Clock from 'clock.js'; // Adjust the import path based on your file structure
+import Clock from './clock.js'; // Adjust the import path based on your file structure
 
 
 export default function Home() {
