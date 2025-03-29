@@ -12,45 +12,36 @@ export default function Home() {
   ]);
   const [message, setMessage] = useState(''); // Moved this above to be consistent with state declaration
   const sendMessage = async () => {
-    setMessage('')
-    setMessages((messages) => [...messages, { role: 'user', content: message }])
+  setMessage(''); // Clear the input field
+  setMessages((messages) => [...messages, { role: 'user', content: message }]);
 
-    const response = fetch('/api/chat', {
+  try {
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-        body: JSON.stringify([...messages, { role: 'user', content: message }]), // Send updated messages
-      }).then((res) => {
-      const reader = res.body.getReader ()
-      const decoder = new TextDecoder()
-      let result = ''
-      return reader.read().then(function processText ({done, value}) {
-        if (done) {
-          return result
-        }
-        const text = decoder.decode(value || new Uint8Array(), {stream: true})
-        setMessages((messages) => {
-          // Ensure there's at least one message before accessing lastMessage
-          if (messages.length === 0) return messages;
-    
-          let lastMessage = messages[messages.length - 1];
-    
-          // Check if lastMessage is from the assistant; if not, add a new one
-          if (lastMessage.role !== 'assistant') {
-            lastMessage = { role: 'assistant', content: '' };
-            messages = [...messages, lastMessage];
-          }
-    
-          let otherMessages = messages.slice(0, messages.length - 1);
-          
-          // Safely update the content of the last message
-          return [...otherMessages, { ...lastMessage, content: lastMessage.content + text }];
-        });
-        return reader.read().then(processText)
-      })
-    })
+      body: JSON.stringify([...messages, { role: 'user', content: message }]),
+    });
+
+    const data = await response.json(); // Assuming your API returns a JSON response
+
+    if (data?.response) {
+      setMessages((messages) => [
+        ...messages,
+        { role: 'assistant', content: data.response },
+      ]);
+    }
+  } catch (error) {
+    console.error("Error fetching AI response:", error);
+    // Optionally, handle the error with a fallback message
+    setMessages((messages) => [
+      ...messages,
+      { role: 'assistant', content: 'Sorry, I couldn’t get a response. Please try again.' },
+    ]);
   }
+};
+
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
